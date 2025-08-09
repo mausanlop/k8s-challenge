@@ -1,6 +1,9 @@
+# El 
+
 # ⚙️ Premisas y Requisitos para Ejecutar el Proyecto
 
 ## ✅ 1. Requisitos de cuentas y servicios en la nube
+<img width="2390" height="350" alt="image" src="https://github.com/user-attachments/assets/c8c5b7d6-1c40-48f3-a25d-c260438897e7" />
 
 ### Google Cloud Platform (GCP)
 - Cuenta activa en Google Cloud (con facturación habilitada).
