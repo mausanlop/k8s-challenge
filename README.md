@@ -1,20 +1,21 @@
-# El 
+# K8s Challenge
+### El siguiente repositorio contiene un despliegue básico de una aplicación web en un cluster de kubernetes, usando herramientas de Google Cloud Platform (GCP) como GKE y Cloud SQL, además de monitoreo con Prometheus y Grafana. 
 
 # ⚙️ Premisas y Requisitos para Ejecutar el Proyecto
 
 ## ✅ 1. Requisitos de cuentas y servicios en la nube
-<img width="2390" height="350" alt="image" src="https://github.com/user-attachments/assets/c8c5b7d6-1c40-48f3-a25d-c260438897e7" />
 
 ### Google Cloud Platform (GCP)
-- Cuenta activa en Google Cloud (con facturación habilitada).
-- Proyecto en GCP creado (por ejemplo: `msl-gke-challenge-prod`).
-- Habilitar las siguientes APIs:
+- Cuenta activa en Google Cloud con facturación habilitada.
+- Proyecto creado en GCP.
+- Habilitar las siguientes APIs en el proyecto de GCP:
   - Kubernetes Engine API
   - Cloud SQL Admin API
   - Compute Engine API
-  - Container Registry (o Artifact Registry)
+  - Artifact Registry
 
-Comandos para habilitar APIs:
+
+Comandos para habilitar APIs en el proyecto de GCP:
 ```bash
 gcloud services enable container.googleapis.com
 gcloud services enable sqladmin.googleapis.com
@@ -24,7 +25,7 @@ gcloud services enable containerregistry.googleapis.com
 
 ---
 
-## ✅ 2. Requisitos en tu máquina local (Mac)
+## ✅ 2. Requisitos en equipo local (en este ejemplo MacOS)
 
 ### Software necesario:
 | Herramienta      | Propósito                             | Comando sugerido o enlace                    |
@@ -34,6 +35,21 @@ gcloud services enable containerregistry.googleapis.com
 | kubectl          | Gestión de recursos de GKE             | `gcloud components install kubectl`          |
 | mysql-client     | Conexión a base de datos Cloud SQL     | `brew install mysql-client`                  |
 | helm             | Instalación de Prometheus y Grafana    | `brew install helm`                          |
+
+
+a. Instalación y validación de "gcloud CLI"
+```bash
+brew install --cask google-cloud-sdk
+gcloud init
+gcloud auth login
+gcloud version
+````
+
+
+
+
+b. Instación y validación de "kubectl"
+
 
 ---
 
@@ -131,11 +147,10 @@ helm install monitoring prometheus-community/kube-prometheus-stack
 Acceso a Grafana:
 ```bash
 kubectl port-forward svc/monitoring-grafana 3000:80
-```
+
 
 URL: [http://localhost:3000](http://localhost:3000)  
 Usuario: `admin`  
 Password:
 ```bash
 kubectl get secret monitoring-grafana   -o jsonpath="{.data.admin-password}" | base64 -d
-```
