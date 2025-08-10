@@ -44,7 +44,10 @@ gcloud init
 gcloud auth login
 gcloud version
 ````
-<img width="894" height="87" alt="image" src="https://github.com/user-attachments/assets/3d3f46e0-52f6-438f-986f-be8d73432f2d" />
+```
+acoca@K8s gke-challenge % gcloud version                   
+Google Cloud SDK 533.0.0
+```
 
 
 
