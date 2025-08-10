@@ -44,19 +44,68 @@ gcloud init
 gcloud auth login
 gcloud version
 ````
+
 ```
 acoca@K8s gke-challenge % gcloud version                   
 Google Cloud SDK 533.0.0
+
+```
+b. Instalación y validación de "kubectl"
+```
+gcloud components install kubectl
 ```
 
+```
+acoca@K8s gke-challenge % kubectl version
+Client Version: v1.33.3
+Kustomize Version: v5.6.0
+Server Version: v1.33.2-gke.1240000
+```
+c. Instalación y validación de "mysql-client"
 
+```
+brew install mysql-client
+brew list mysql-client
+```
 
+```
+acoca@K8s gke-challenge % brew list mysql-client
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/comp_err
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/my_print_defaults
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysql
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysql_config
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysql_config_editor
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysql_migrate_keyring
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysql_secure_installation
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqladmin
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqlbinlog
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqlcheck
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqldump
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqlimport
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqlshow
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqlslap
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/mysqltest
+/opt/homebrew/Cellar/mysql-client/9.4.0/bin/perror
+/opt/homebrew/Cellar/mysql-client/9.4.0/include/mysql/ (13 files)
+/opt/homebrew/Cellar/mysql-client/9.4.0/lib/libmysqlclient.24.dylib
+/opt/homebrew/Cellar/mysql-client/9.4.0/lib/pkgconfig/mysqlclient.pc
+/opt/homebrew/Cellar/mysql-client/9.4.0/lib/plugin/ (5 files)
+/opt/homebrew/Cellar/mysql-client/9.4.0/lib/ (2 other files)
+/opt/homebrew/Cellar/mysql-client/9.4.0/sbom.spdx.json
+/opt/homebrew/Cellar/mysql-client/9.4.0/share/doc/ (2 files)
+/opt/homebrew/Cellar/mysql-client/9.4.0/share/man/ (27 files)
+/opt/homebrew/Cellar/mysql-client/9.4.0/share/mysql/ (53 files)
+```
+d. Instalación y validación de "Helm"
 
-
-b. Instación y validación de "kubectl"
-
-
----
+```
+brew install helm
+helm version
+```
+```
+acoca@K8s gke-challenge % helm version
+version.BuildInfo{Version:"v3.18.4", GitCommit:"d80839cf37d860c8aa9a0503fe463278f26cd5e2", GitTreeState:"clean", GoVersion:"go1.24.5"}
+```
 
 ## ✅ 3. Recursos necesarios en GCP
 
