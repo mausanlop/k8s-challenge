@@ -44,6 +44,7 @@ gcloud init
 gcloud auth login
 gcloud version
 ````
+<img width="894" height="87" alt="image" src="https://github.com/user-attachments/assets/d7951d75-4077-4068-a9d6-5465ae4f9cf8" />
 
 
 
