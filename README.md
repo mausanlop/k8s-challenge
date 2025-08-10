@@ -106,8 +106,128 @@ helm version
 acoca@K8s gke-challenge % helm version
 version.BuildInfo{Version:"v3.18.4", GitCommit:"d80839cf37d860c8aa9a0503fe463278f26cd5e2", GitTreeState:"clean", GoVersion:"go1.24.5"}
 ```
+---
 
 ## ✅ 3. Recursos necesarios en GCP
+
+1. Creacion de proyecto en GCP
+```
+gcloud projects create  gke-challenge-msl
+```
+```
+acoca@K8s gke-challenge % gcloud projects  create gke-challenge-msl
+Create in progress for [https://cloudresourcemanager.googleapis.com/v1/projects/gke-challenge-msl].
+Waiting for [operations/create_project.global.9159840548868572380] to finish...done.                                                                                     
+Enabling service [cloudapis.googleapis.com] on project [gke-challenge-msl]...
+Operation "operations/acat.p2-669243478909-a6a7bd30-c97c-4786-9917-5c5d39b46e27" finished successfully.
+```
+a. Validar y habilitar cuenta de facuración al proyecto de GCP
+```
+cloud alpha billing accounts list
+```
+```
+acoca@K8s gke-challenge % gcloud alpha billing accounts list
+ACCOUNT_ID            NAME                      OPEN  MASTER_ACCOUNT_ID
+0144E4-4F81E0-26C456  Mi cuenta de facturación  True
+```
+```
+gcloud beta billing projects link gke-challenge-msl  --billing-account=0144E4-4F81E0-26C456 
+````
+
+```
+acoca@K8s gke-challenge %     gcloud beta billing projects link gke-challenge-msl  --billing-account=0144E4-4F81E0-26C456 
+billingAccountName: billingAccounts/0144E4-4F81E0-26C456
+billingEnabled: true
+name: projects/gke-challenge-msl/billingInfo
+projectId: gke-challenge-msl
+```
+
+2. Habilitar API en el proyecto de GCP
+
+a. Validar nombre de proyecto en uso
+```
+gcloud config get-value project
+gcloud config set project gke-challenge-msl 
+```
+```
+acoca@K8s gke-challenge % gcloud config get-value project 
+(unset)
+acoca@K8s gke-challenge % gcloud config set project gke-challenge-msl
+Updated property [core/project].
+acoca@K8s gke-challenge % gcloud config get-value project        
+gke-challenge-msl
+```
+b. Comandos para habilitar API´s en el proyecto de GCP 
+
+````
+gcloud services enable container.googleapis.com
+gcloud services enable sqladmin.googleapis.com
+gcloud services enable compute.googleapis.com
+gcloud services enable containerregistry.googleapis.com
+```
+```
+acoca@K8s gke-challenge % gcloud services list
+NAME                                TITLE
+analyticshub.googleapis.com         Analytics Hub API
+artifactregistry.googleapis.com     Artifact Registry API
+autoscaling.googleapis.com          Cloud Autoscaling API
+bigquery.googleapis.com             BigQuery API
+bigqueryconnection.googleapis.com   BigQuery Connection API
+bigquerydatapolicy.googleapis.com   BigQuery Data Policy API
+bigquerymigration.googleapis.com    BigQuery Migration API
+bigqueryreservation.googleapis.com  BigQuery Reservation API
+bigquerystorage.googleapis.com      BigQuery Storage API
+cloudapis.googleapis.com            Google Cloud APIs
+cloudtrace.googleapis.com           Cloud Trace API
+compute.googleapis.com              Compute Engine API
+container.googleapis.com            Kubernetes Engine API
+containerfilesystem.googleapis.com  Container File System API
+containerregistry.googleapis.com    Container Registry API
+dataform.googleapis.com             Dataform API
+dataplex.googleapis.com             Cloud Dataplex API
+datastore.googleapis.com            Cloud Datastore API
+dns.googleapis.com                  Cloud DNS API
+gkebackup.googleapis.com            Backup for GKE API
+iam.googleapis.com                  Identity and Access Management (IAM) API
+iamcredentials.googleapis.com       IAM Service Account Credentials API
+logging.googleapis.com              Cloud Logging API
+monitoring.googleapis.com           Cloud Monitoring API
+networkconnectivity.googleapis.com  Network Connectivity API
+oslogin.googleapis.com              Cloud OS Login API
+pubsub.googleapis.com               Cloud Pub/Sub API
+servicemanagement.googleapis.com    Service Management API
+serviceusage.googleapis.com         Service Usage API
+sql-component.googleapis.com        Cloud SQL
+sqladmin.googleapis.com             Cloud SQL Admin API
+storage-api.googleapis.com          Google Cloud Storage JSON API
+storage-component.googleapis.com    Cloud Storage
+storage.googleapis.com              Cloud Storage API
+acoca@K8s gke-challenge % 
+````
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 1. Clúster GKE creado y accesible:
 ```bash
