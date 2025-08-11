@@ -266,8 +266,9 @@ gcloud container clusters create gke-challenge-msl \
   ```
   ```
 acoca@K8s gke-challenge % gcloud container clusters list                                                
-NAME               LOCATION       MASTER_VERSION      MASTER_IP       MACHINE_TYPE  NODE_VERSION        NUM_NODES  STATUS   STACK_TYPE
-gke-challenge-msl  us-central1-a  1.33.2-gke.1240000  35.192.113.196  e2-medium     1.33.2-gke.1240000  1          RUNNING  IPV4
+|NAME               |LOCATION       |MASTER_VERSION      |MASTER_IP       |MACHINE_TYPE  |NODE_VERSION       |NUM_NODES  |STATUS   |STACK_TYPE|
+|-------------------|---------------|--------------------|----------------|--------------|-------------------|-------------------- |-----------|
+|gke-challenge-msl  |us-central1-a  |1.33.2-gke.1240000  |35.192.113.196  |e2-medium     |1.33.2-gke.1240000 |1          |RUNNING  IPV4        |
 ```
 3.5 Creación de instancia MySQL en Cloud SQL:
 ```
@@ -282,8 +283,8 @@ gcloud sql instances describe gke-challenge-msl
 ```
 Creating Cloud SQL instance for MYSQL_8_0...done.                                                                                                        
 Created [https://sqladmin.googleapis.com/sql/v1beta4/projects/gke-challenge-msl/instances/gke-challenge-msl].
-NAME               DATABASE_VERSION  LOCATION       TIER         PRIMARY_ADDRESS  PRIVATE_ADDRESS  STATUS
-gke-challenge-msl  MYSQL_8_0         us-central1-c  db-g1-small  35.184.41.235    -                RUNNABLE 
+|NAME               |DATABASE_VERSION  |LOCATION       |TIER         |PRIMARY_ADDRESS  |PRIVATE_ADDRESS  STATUS
+|gke-challenge-msl  |MYSQL_8_0         |us-central1-c  |db-g1-small  |35.184.41.235    |     RUNNABLE 
 ```
 3.5.1 Configurando usuario y contraseña para la instancia MySQL en Cloud SQL
 ```
