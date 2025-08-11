@@ -384,7 +384,6 @@ Aplicación de login simple en PHP con autenticación básica y conexión a Clou
 mkdir gke-challenge
 cd gke-challenge
 touch db.php index.php dashboard.php logout.php Dockerfile .dockerignore php-login-deployment.yaml
-mkdir docs
 ```
 5.1 index.php
 
