@@ -662,6 +662,16 @@ acoca@K8s gke-challenge % kubectl get svc php-login-service
 NAME                TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
 php-login-service   LoadBalancer   34.118.239.35   34.27.165.2   80:31680/TCP   5m54s
 ```
+```
+Pantalla de login
+```
+<img width="1446" height="492" alt="image" src="https://github.com/user-attachments/assets/fcb31834-fa73-44fa-b803-0f5a5a237f33" />
+
+```
+Pantalla con acceso
+```
+<img width="2920" height="800" alt="image" src="https://github.com/user-attachments/assets/74221fda-e7f0-41a3-bc6a-1c827643e61a" />
+
 ---
 
 #### 📊 8. Monitoreo con Helm, Prometheus y Grafana
