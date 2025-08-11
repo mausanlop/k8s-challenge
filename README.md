@@ -1,22 +1,23 @@
 # K8s Challenge
-### El siguiente repositorio contiene un despliegue básico de una aplicación web en un cluster de kubernetes, usando herramientas de Google Cloud Platform (GCP) como GKE y Cloud SQL, además de monitoreo con Prometheus y Grafana. 
+###### El siguiente repositorio contiene un despliegue básico de una aplicación web en un cluster de kubernetes, usando herramientas de Google Cloud Platform (GCP) como GKE y Cloud SQL, además de monitoreo con Prometheus y Grafana. 
 
-# ⚙️ Premisas y Requisitos para Ejecutar el Proyecto
+### ⚙️ Premisas y Requisitos para Ejecutar el Proyecto
 
-## ✅ 1. Requisitos de cuentas y servicios en la nube
+#### ✅ 1. Requisitos de cuentas y servicios en la nube
 
-### Google Cloud Platform (GCP)
+#### 1.1 Google Cloud Platform (GCP)
+
 - Cuenta activa en Google Cloud con facturación habilitada.
 - Proyecto creado en GCP.
-- Habilitar las siguientes APIs en el proyecto de GCP:
-  - Kubernetes Engine API
+- Habilitar las siguientes API´s en el proyecto de GCP:
+- Kubernetes Engine API
   - Cloud SQL Admin API
   - Compute Engine API
   - Artifact Registry
 
 
-Comandos para habilitar APIs en el proyecto de GCP:
-```bash
+- Comandos para habilitar API´s en el proyecto de GCP:
+```
 gcloud services enable container.googleapis.com
 gcloud services enable sqladmin.googleapis.com
 gcloud services enable compute.googleapis.com
@@ -25,9 +26,9 @@ gcloud services enable containerregistry.googleapis.com
 
 ---
 
-## ✅ 2. Requisitos en equipo local (en este ejemplo MacOS)
+#### ✅ 2. Recursos necearios en equipo local (MacOS)
 
-### Software necesario:
+#### 2.1 Software necesario:
 | Herramienta      | Propósito                             | Comando sugerido o enlace                    |
 |------------------|----------------------------------------|----------------------------------------------|
 | Docker           | Construcción local de imágenes         | [docker.com](https://www.docker.com)         |
@@ -37,37 +38,33 @@ gcloud services enable containerregistry.googleapis.com
 | helm             | Instalación de Prometheus y Grafana    | `brew install helm`                          |
 
 
-a. Instalación y validación de "gcloud CLI"
-```bash
+2.2 Instalación y validación de "gcloud CLI"
+```
 brew install --cask google-cloud-sdk
 gcloud init
 gcloud auth login
 gcloud version
-````
-
+```
 ```
 acoca@K8s gke-challenge % gcloud version                   
 Google Cloud SDK 533.0.0
-
 ```
-b. Instalación y validación de "kubectl"
+2.3 Instalación y validación de "kubectl"
 ```
 gcloud components install kubectl
 ```
-
 ```
 acoca@K8s gke-challenge % kubectl version
 Client Version: v1.33.3
 Kustomize Version: v5.6.0
 Server Version: v1.33.2-gke.1240000
 ```
-c. Instalación y validación de "mysql-client"
+2.4 Instalación y validación de "mysql-client"
 
 ```
 brew install mysql-client
 brew list mysql-client
 ```
-
 ```
 acoca@K8s gke-challenge % brew list mysql-client
 /opt/homebrew/Cellar/mysql-client/9.4.0/bin/comp_err
@@ -96,7 +93,7 @@ acoca@K8s gke-challenge % brew list mysql-client
 /opt/homebrew/Cellar/mysql-client/9.4.0/share/man/ (27 files)
 /opt/homebrew/Cellar/mysql-client/9.4.0/share/mysql/ (53 files)
 ```
-d. Instalación y validación de "Helm"
+2.5 Instalación y validación de "Helm"
 
 ```
 brew install helm
@@ -106,10 +103,10 @@ helm version
 acoca@K8s gke-challenge % helm version
 version.BuildInfo{Version:"v3.18.4", GitCommit:"d80839cf37d860c8aa9a0503fe463278f26cd5e2", GitTreeState:"clean", GoVersion:"go1.24.5"}
 ```
-e. Validación de instalación de Docker
+2.6 Validación de instalación de Docker
 ```
 docker version
-````
+```
 ```
 acoca@K8s gke-challenge % docker version
 Client:
@@ -144,9 +141,9 @@ Server: Docker Desktop 4.43.2 (199162)
 
 ---
 
-## ✅ 3. Recursos necesarios en GCP
+#### ✅ 3. Recursos necesarios en GCP
 
-1. Creacion de proyecto en GCP
+3.1 Creacion de proyecto en GCP
 ```
 gcloud projects create  gke-challenge-msl
 ```
@@ -157,7 +154,7 @@ Waiting for [operations/create_project.global.9159840548868572380] to finish...d
 Enabling service [cloudapis.googleapis.com] on project [gke-challenge-msl]...
 Operation "operations/acat.p2-669243478909-a6a7bd30-c97c-4786-9917-5c5d39b46e27" finished successfully.
 ```
-a. Validar y habilitar cuenta de facuración al proyecto de GCP
+3.1.1 Validar y habilitar cuenta de facuración al proyecto de GCP
 ```
 cloud alpha billing accounts list
 ```
@@ -178,9 +175,9 @@ name: projects/gke-challenge-msl/billingInfo
 projectId: gke-challenge-msl
 ```
 
-2. Habilitar API en el proyecto de GCP
+3.2 Habilitar API en el proyecto de GCP
 
-a. Validar nombre de proyecto en uso
+3.2.1 Validar nombre de proyecto en uso
 ```
 gcloud config get-value project
 gcloud config set project gke-challenge-msl 
@@ -193,9 +190,9 @@ Updated property [core/project].
 acoca@K8s gke-challenge % gcloud config get-value project        
 gke-challenge-msl
 ```
-b. Comandos para habilitar API´s en el proyecto de GCP 
+3.2.2 Comandos para habilitar API´s en el proyecto de GCP 
 
-````
+```
 gcloud services enable container.googleapis.com
 gcloud services enable sqladmin.googleapis.com
 gcloud services enable compute.googleapis.com
@@ -240,8 +237,8 @@ storage-api.googleapis.com          Google Cloud Storage JSON API
 storage-component.googleapis.com    Cloud Storage
 storage.googleapis.com              Cloud Storage API
 acoca@K8s gke-challenge % 
-````
-2. Creación de repositorio artifact registry en GCP 
+```
+3.3 Creación de repositorio artifact registry en GCP 
 ```
 gcloud artifacts repositories create gke-challenge-msl \
   --repository-format=docker \
@@ -258,7 +255,7 @@ Waiting for operation [projects/gke-challenge-msl/locations/us-central1/operatio
 Created repository [gke-challenge-msl].
 ```
 ```
-3. Creación de cluster GKE en GCP
+3.4 Creación de cluster GKE en GCP
 ```
 gcloud container clusters create gke-challenge-msl \
   --zone us-central1-a \
@@ -266,11 +263,12 @@ gcloud container clusters create gke-challenge-msl \
 
   gcloud container clusters list 
   ```
+  ```
 acoca@K8s gke-challenge % gcloud container clusters list                                                
 NAME               LOCATION       MASTER_VERSION      MASTER_IP       MACHINE_TYPE  NODE_VERSION        NUM_NODES  STATUS   STACK_TYPE
 gke-challenge-msl  us-central1-a  1.33.2-gke.1240000  35.192.113.196  e2-medium     1.33.2-gke.1240000  1          RUNNING  IPV4
 ```
-4. Creación de instancia MySQL en Cloud SQL:
+3.5 Creación de instancia MySQL en Cloud SQL:
 ```
 gcloud sql instances create gke-challenge-msl \
     --database-version=MYSQL_8_0 \
@@ -281,15 +279,16 @@ gcloud sql instances create gke-challenge-msl \
 gcloud sql instances describe gke-challenge-msl
 ```
 ```
-Creating Cloud SQL instance for MYSQL_8_0...done.                                                                                                        Created [https://sqladmin.googleapis.com/sql/v1beta4/projects/gke-challenge-msl/instances/gke-challenge-msl].
+Creating Cloud SQL instance for MYSQL_8_0...done.                                                                                                        
+Created [https://sqladmin.googleapis.com/sql/v1beta4/projects/gke-challenge-msl/instances/gke-challenge-msl].
 NAME               DATABASE_VERSION  LOCATION       TIER         PRIMARY_ADDRESS  PRIVATE_ADDRESS  STATUS
 gke-challenge-msl  MYSQL_8_0         us-central1-c  db-g1-small  35.184.41.235    -                RUNNABLE 
 ```
-a. Configurando usuario y contraseña para la instancia MySQL en Cloud SQL
+3.5.1 Configurando usuario y contraseña para la instancia MySQL en Cloud SQL
 ```
 gcloud sql users set-password root --host=% --instance=gke-challenge-msl --password=example
 ```
-b. Validando conexión a la instacia de Cloud SQL
+3.5.2 Validando conexión a la instacia de Cloud SQL
 ```
 acoca@K8s gke-challenge % gcloud sql connect gke-challenge-msl  --user=root     
 Allowlisting your IP for incoming connection for 5 minutes...done.                                                                                                      
@@ -308,10 +307,11 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 mysql> 
 ```
-c. Creando la base de datos de prueba y tabla de usuarios
+3.5.3 Creando la base de datos de prueba y tabla de usuarios
 
 ```
 mysql> CREATE DATABASE login_db;
+```
 ```
 Query OK, 1 row affected (0.063 sec)
 ```
@@ -348,110 +348,393 @@ mysql> SELECT * FROM users;
 |  1 | ng-voice | challenge |
 +----+----------+-----------+
 1 row in set (0.062 sec)
+```
+3.5.4 Obtener IP pública de Cloud SQL:
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-3. Obtener IP pública de Cloud SQL:
-```bash
-gcloud sql instances describe my-mysql --format="value(ipAddresses.ipAddress)"
+gcloud sql instances describe gke-challenge-msl --format="value(ipAddresses.ipAddress)"
 ```
-
-4. Habilitar acceso desde GKE:
-```bash
-gcloud sql instances patch my-mysql --authorized-networks=<GKE_NODE_IP>/32
 ```
+IP 35.184.41.235
+```
+3.5.5 Habilitar acceso desde GKE:
 
+```
+gcloud sql instances patch gke-challenge-msl --authorized-networks="34.68.41.117/32,35.192.113.196/32"
+```
+```
+The following message will be used for the patch API method.
+{"name": "gke-challenge-msl", "project": "gke-challenge-msl", "settings": {"ipConfiguration": {"authorizedNetworks": [{"value": "34.68.41.117/32"}, {"value": "35.192.113.196/32"}]}}}
+Patching Cloud SQL instance...done. 
+
+```
 ---
 
-## ✅ 4. Permisos requeridos
+#### 📘 4. Documentación: PHP Login App en GKE + Cloud SQL
 
-- Autenticación:
-```bash
-gcloud auth login
-gcloud config set project <PROJECT_ID>
-```
-
----
-
-## 📘 Documentación: PHP Login App en GKE + Cloud SQL
-
-## 📌 Descripción
+#### 📌 Descripción
 
 Aplicación de login simple en PHP con autenticación básica y conexión a Cloud SQL (MySQL), desplegada en GKE usando Docker.
 
 ---
 
-## 📁 Estructura del Proyecto
+####  📁 5. Estructura del Proyecto
 
-```bash
-mkdir php-login-app
-cd php-login-app
+```
+mkdir gke-challenge
+cd gke-challenge
 touch db.php index.php dashboard.php logout.php Dockerfile .dockerignore php-login-deployment.yaml
 mkdir docs
 ```
+5.1 index.php
 
+```
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
+session_start();
+require 'db.php';
+
+$error = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+
+    $stmt = $conn->prepare("SELECT * FROM users WHERE username=? AND password=?");
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows == 1) {
+        $_SESSION["username"] = $username;
+        header("Location: dashboard.php");
+        exit();
+    } else {
+        $error = "Usuario o contraseña incorrectos.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <!-- Aquí iría tu CSS -->
+</head>
+<body>
+    <h2>Iniciar Sesión</h2>
+    <?php if ($error): ?>
+        <div style="color:red;"><?php echo htmlspecialchars($error); ?></div>
+    <?php endif; ?>
+    <form method="POST">
+        <label>Usuario:
+            <input type="text" name="username" required>
+        </label><br>
+        <label>Contraseña:
+            <input type="password" name="password" required>
+        </label><br>
+        <button type="submit">Entrar</button>
+    </form>
+</body>
+</html>
+```
+5.2 dashboard.php
+
+```
+<?php
+session_start();
+if (!isset($_SESSION["username"])) {
+    header("Location: index.php");
+    exit();
+}
+$username = $_SESSION["username"];
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <style>
+        body {
+            background: #e3f2fd;
+            font-family: Arial, sans-serif;
+        }
+
+        .dashboard-container {
+            width: 400px;
+            margin: 100px auto;
+            padding: 30px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        a.logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #d32f2f;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        a.logout-button:hover {
+            background: #b71c1c;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <h2>Bienvenido, <?php echo htmlspecialchars($username); ?> 🎉</h2>
+        <p>Has iniciado sesión correctamente.</p>
+        <a href="logout.php" class="logout-button">Cerrar sesión</a>
+    </div>
+</body>
+</html>
+```
+5.3 logout.php
+```
+<?php
+session_start();
+session_destroy();
+header("Location: index.php");
+exit;
+```
+5.4 db.php
+
+```
+<?php
+// SIN espacios/líneas fuera de este bloque PHP
+$host = getenv('DB_HOST') ?: '127.0.0.1';
+$db   = getenv('DB_NAME') ?: 'login_db';
+$user = getenv('DB_USER') ?: 'root';
+$pass = getenv('DB_PASS') ?: '';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    error_log("Error de conexión a la base de datos: " . $conn->connect_error);
+    exit;
+}
+
+$conn->set_charset('utf8mb4');
+acoca@K8s gke-challenge % 
+```
+
+5.5 php-login-deployment.yaml
+
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-login-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-login-app
+  template:
+    metadata:
+      labels:
+        app: php-login-app
+    spec:
+      containers:
+      - name: php
+        image: us-central1-docker.pkg.dev/gke-challenge-msl/gke-challenge-msl/php-login-app:v1
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "35.184.41.235"
+        - name: DB_NAME
+          value: "login_db"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASS
+          value: "example"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-login-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: php-login-app
+  ports:
+  - port: 80
+    targetPort: 80
+```
+5.6 Dockerfile
+
+```
+FROM php:8.1-apache
+
+# Extensión MySQLi
+RUN docker-php-ext-install mysqli
+
+# Copia la app
+COPY . /var/www/html/
+
+#  permisos mínimos
+RUN chown -R www-data:www-data /var/www/html
+
+EXPOSE 80
+```
+5.7 .dockerignore
+```
+.dockerignore
+Dockerfile
+*.log
+*.zip
+.git
+````
 ---
 
-## 🐳 Docker Build y Push
+#### 🐳 6. Docker Build y Push a Artifact Registry
 
-```bash
+6.1 Variables
+```
+export PROJECT_ID="gke-challenge-msl"
+export REGION="us-central1"
+export REPO="gke-challenge-msl"
+export IMAGE_NAME="php-login-app"
+export TAG="v1"
+export IMAGE_URI="$REGION-docker.pkg.dev/$PROJECT_ID/$REPO/$IMAGE_NAME:$TAG"
+```
+
+6.2 Login en Artifact Registry
+```
+gcloud auth configure-docker $REGION-docker.pkg.dev
+```
+6.3 Construir para linux/amd64 y publicar
+```
+docker buildx build --platform linux/amd64 -t "$IMAGE_URI" --push .
 docker buildx build   --platform linux/amd64   -t gcr.io/msl-gke-challenge-prod/php-login-app:latest   --push .
 ```
-
 ---
 
-## ☁️ Despliegue en GKE
+#### ☁️ 7. Despliegue en GKE
 
-```bash
+7.1 Conectar kubectl al cluster
+```
+gcloud container clusters get-credentials gke-challenge-msl \
+  --zone us-central1-a \
+  --project gke-challenge-msl
+```
+```
+acoca@K8s gke-challenge % gcloud container clusters get-credentials gke-challenge-msl \
+  --zone us-central1-a \
+  --project gke-challenge-msl
+Fetching cluster endpoint and auth data.
+kubeconfig entry generated for gke-challenge-msl.
+````
+
+7.2 Aplicar manifiesto
+```
 kubectl apply -f php-login-deployment.yaml
-kubectl rollout restart deployment php-login-app
 ```
-
-Ver estado:
-```bash
-kubectl get pods -o wide
-kubectl get svc
-kubectl logs <pod-name>
-kubectl exec -it <pod-name> -- bash
 ```
-
+acoca@K8s gke-challenge % kubectl apply -f php-login-deployment.yaml
+deployment.apps/php-login-app unchanged
+service/php-login-service unchanged
+```
+7.3 Ver estado de los pods
+```
+kubectl get pods
+````
+```
+acoca@K8s gke-challenge % kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+php-login-app-6675b789-khgjh   1/1     Running   0          5m37s
+```
+```
+kubectl get svc php-login-service
+```
+```
+acoca@K8s gke-challenge % kubectl get svc php-login-service
+NAME                TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+php-login-service   LoadBalancer   34.118.239.35   34.27.165.2   80:31680/TCP   5m54s
+```
 ---
 
-## 📊 Monitoreo con Helm, Prometheus y Grafana
+#### 📊 8. Monitoreo con Helm, Prometheus y Grafana
 
-```bash
+8.1 Actualizar repositorio e instalación de stack 
+```
+kubectl create namespace monitoring 2>/dev/null || true
 helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 helm repo update
-helm install monitoring prometheus-community/kube-prometheus-stack
+helm install monitoring prometheus-community/kube-prometheus-stack \
+  --namespace monitoring
+```
+8.2 Validar estado de pods de monitoreo
+
+```
+kubectl get pods -n monitoring
+kubectl get svc -n monitoring
+```
+```
+acoca@K8s gke-challenge % kubectl get pods -n monitoring
+
+|NAME                                                     |READY   |STATUS    |RESTARTS   |AGE  |
+|---------------------------------------------------------|--------|----------|-----------|-----|
+|alertmanager-monitoring-kube-prometheus-alertmanager-0   |2/2     |Running   |0          |7m23s|
+|monitoring-grafana-7f85f98dcb-2866h                      |3/3     |Running   |0          |7m29s|
+|monitoring-kube-prometheus-operator-59d66b9787-nvl5d     |1/1     |Running   |0          |7m29s|
+|monitoring-kube-state-metrics-69dcd947d6-mxvrg           |1/1     |Running   |0          |7m29s|
+|monitoring-prometheus-node-exporter-87q2z                |1/1     |Running   |0          |7m30s|
+|prometheus-monitoring-kube-prometheus-prometheus-0       |2/2     |Running   |0          |7m23s|
+```
+```
+acoca@K8s gke-challenge % kubectl get svc -n monitoring
+
+|NAME                                      |TYPE        |CLUSTER-IP       |EXTERNAL-IP   |PORT(S)                      |AGE
+-------------------------------------------|------------|-----------------|--------------|-----------------------------|
+|alertmanager-operated                     |ClusterIP   |None             |<none>        |9093/TCP,9094/TCP,9094/UDP   |19m
+|monitoring-grafana                        |ClusterIP   |34.118.235.229   |<none>        |80/TCP                       |20m
+|monitoring-kube-prometheus-alertmanager   |ClusterIP   |34.118.230.223   |<none>        |9093/TCP,8080/TCP            |20m
+|monitoring-kube-prometheus-operator       |ClusterIP   |34.118.236.232   |<none>        |443/TCP                      |20m
+|monitoring-kube-prometheus-prometheus     |ClusterIP   |34.118.226.213   |<none>        |9090/TCP,8080/TCP            |20m
+|monitoring-kube-state-metrics             |ClusterIP   |34.118.230.153   |<none>        |8080/TCP                     |20m
+|monitoring-prometheus-node-exporter       |ClusterIP   |34.118.238.246   |<none>        |9100/TCP                     |20m
+|prometheus-operated                       |ClusterIP   |None             |<none>        |9090/TCP                     |19m
+```
+```
+8.3 Redirección de puerto y acceso a Grafana
+```
+kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo
+kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
+```
+```
+acoca@K8s gke-challenge % kubectl get secret -n monitoring monitoring-grafana -o jsonpath="{.data.admin-password}" | base64 -d; echo
+prom-operator
+acoca@K8s gke-challenge % kubectl port-forward -n monitoring svc/monitoring-grafana 3000:80
+Forwarding from 127.0.0.1:3000 -> 3000
+Forwarding from [::1]:3000 -> 3000
+
+URL: http://localhost:3000
+Usuario:  admin  
+Password: prom-operator
+```
+8.4 Redirección de puerto y acceso a Prometheus
+
+```
+kubectl port-forward -n monitoring svc/monitoring-kube-prometheus-prometheus 9090:9090
+```
+```
+acoca@K8s gke-challenge % kubectl port-forward -n monitoring svc/monitoring-kube-prometheus-prometheus 9090:9090
+Forwarding from 127.0.0.1:9090 -> 9090
+Forwarding from [::1]:9090 -> 9090
+Handling connection for 9090
+
+URL http://localhost:9090  
 ```
 
-Acceso a Grafana:
-```bash
-kubectl port-forward svc/monitoring-grafana 3000:80
-
-
-URL: [http://localhost:3000](http://localhost:3000)  
-Usuario: `admin`  
-Password:
-```bash
-kubectl get secret monitoring-grafana   -o jsonpath="{.data.admin-password}" | base64 -d
