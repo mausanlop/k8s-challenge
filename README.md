@@ -106,6 +106,42 @@ helm version
 acoca@K8s gke-challenge % helm version
 version.BuildInfo{Version:"v3.18.4", GitCommit:"d80839cf37d860c8aa9a0503fe463278f26cd5e2", GitTreeState:"clean", GoVersion:"go1.24.5"}
 ```
+e. Validación de instalación de Docker
+```
+docker version
+````
+```
+acoca@K8s gke-challenge % docker version
+Client:
+ Version:           28.3.2
+ API version:       1.51
+ Go version:        go1.24.5
+ Git commit:        578ccf6
+ Built:             Wed Jul  9 16:12:57 2025
+ OS/Arch:           darwin/arm64
+ Context:           desktop-linux
+
+Server: Docker Desktop 4.43.2 (199162)
+ Engine:
+  Version:          28.3.2
+  API version:      1.51 (minimum version 1.24)
+  Go version:       go1.24.5
+  Git commit:       e77ff99
+  Built:            Wed Jul  9 16:13:56 2025
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.7.27
+  GitCommit:        05044ec0a9a75232cad458027ca83437aae3f4da
+ runc:
+  Version:          1.2.5
+  GitCommit:        v1.2.5-0-g59923ef
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
+  ````
+
+
 ---
 
 ## ✅ 3. Recursos necesarios en GCP
@@ -164,6 +200,7 @@ gcloud services enable container.googleapis.com
 gcloud services enable sqladmin.googleapis.com
 gcloud services enable compute.googleapis.com
 gcloud services enable containerregistry.googleapis.com
+gcloud services enable artifactregistry.googleapis.com
 ```
 ```
 acoca@K8s gke-challenge % gcloud services list
@@ -204,45 +241,135 @@ storage-component.googleapis.com    Cloud Storage
 storage.googleapis.com              Cloud Storage API
 acoca@K8s gke-challenge % 
 ````
+2. Creación de repositorio artifact registry en GCP 
+```
+gcloud artifacts repositories create gke-challenge-msl \
+  --repository-format=docker \
+  --location=us-central1 \
+  --description="gke-challenge-msl" 
+  ```
+  ```
+  acoca@K8s gke-challenge % gcloud artifacts repositories create gke-challenge-msl \
+  --repository-format=docker \
+  --location=us-central1 \
+  --description="gke-challenge-msl"
+Create request issued for: [gke-challenge-msl]
+Waiting for operation [projects/gke-challenge-msl/locations/us-central1/operations/0e558e2e-41ab-4ab5-a41d-021443b67331] to complete...done.                             
+Created repository [gke-challenge-msl].
+```
+```
+3. Creación de cluster GKE en GCP
+```
+gcloud container clusters create gke-challenge-msl \
+  --zone us-central1-a \
+  --num-nodes 1
 
+  gcloud container clusters list 
+  ```
+acoca@K8s gke-challenge % gcloud container clusters list                                                
+NAME               LOCATION       MASTER_VERSION      MASTER_IP       MACHINE_TYPE  NODE_VERSION        NUM_NODES  STATUS   STACK_TYPE
+gke-challenge-msl  us-central1-a  1.33.2-gke.1240000  35.192.113.196  e2-medium     1.33.2-gke.1240000  1          RUNNING  IPV4
+```
+4. Creación de instancia MySQL en Cloud SQL:
+```
+gcloud sql instances create gke-challenge-msl \
+    --database-version=MYSQL_8_0 \
+    --region=us-central1 \
+    --tier=db-g1-small \
+    --storage-type=SSD \
+    --storage-size=10GB
+gcloud sql instances describe gke-challenge-msl
+```
+```
+Creating Cloud SQL instance for MYSQL_8_0...done.                                                                                                        Created [https://sqladmin.googleapis.com/sql/v1beta4/projects/gke-challenge-msl/instances/gke-challenge-msl].
+NAME               DATABASE_VERSION  LOCATION       TIER         PRIMARY_ADDRESS  PRIVATE_ADDRESS  STATUS
+gke-challenge-msl  MYSQL_8_0         us-central1-c  db-g1-small  35.184.41.235    -                RUNNABLE 
+```
+a. Configurando usuario y contraseña para la instancia MySQL en Cloud SQL
+```
+gcloud sql users set-password root --host=% --instance=gke-challenge-msl --password=example
+```
+b. Validando conexión a la instacia de Cloud SQL
+```
+acoca@K8s gke-challenge % gcloud sql connect gke-challenge-msl  --user=root     
+Allowlisting your IP for incoming connection for 5 minutes...done.                                                                                                      
+Connecting to database with SQL user [root].Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 393
+Server version: 8.0.41-google (Google)
 
+Copyright (c) 2000, 2025, Oracle and/or its affiliates.
 
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
 
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
+mysql> 
+```
+c. Creando la base de datos de prueba y tabla de usuarios
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-1. Clúster GKE creado y accesible:
-```bash
-gcloud container clusters create my-gke-cluster   --zone us-central1-c   --num-nodes 3
-gcloud container clusters get-credentials my-gke-cluster --zone us-central1-c
+```
+mysql> CREATE DATABASE login_db;
+```
+Query OK, 1 row affected (0.063 sec)
+```
+mysql> USE login_db;
+```
+```
+Database changed
+```
+``` 
+mysql>  CREATE TABLE users (
+         ->   id INT AUTO_INCREMENT PRIMARY KEY,
+         ->   username VARCHAR(50) NOT NULL,
+         ->   password VARCHAR(50) NOT NULL
+         -> );
+```
+```
+Query OK, 0 rows affected (0.083 sec)
 ```
 
-2. Instancia MySQL en Cloud SQL:
-```bash
-gcloud sql instances create my-mysql   --database-version=MYSQL_8_0   --tier=db-g1-small   --region=us-central1
-
-gcloud sql users set-password root --host=% --instance=my-mysql --password=example
-
-gcloud sql databases create login_db --instance=my-mysql
 ```
+mysql> INSERT INTO users (username, password) VALUES ('ng-voice', 'challenge');
+```
+```
+Query OK, 1 row affected (0.066 sec)
+```
+
+```
+mysql> SELECT * FROM users;
+```
+```
++----+----------+-----------+
+| id | username | password  |
++----+----------+-----------+
+|  1 | ng-voice | challenge |
++----+----------+-----------+
+1 row in set (0.062 sec)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 3. Obtener IP pública de Cloud SQL:
 ```bash
