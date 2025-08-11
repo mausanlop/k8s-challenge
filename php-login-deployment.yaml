@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php-login-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: php-login-app
+  template:
+    metadata:
+      labels:
+        app: php-login-app
+    spec:
+      containers:
+      - name: php
+        image: us-central1-docker.pkg.dev/gke-challenge-msl/gke-challenge-msl/php-login-app:v1
+        ports:
+        - containerPort: 80
+        env:
+        - name: DB_HOST
+          value: "35.184.41.235"
+        - name: DB_NAME
+          value: "login_db"
+        - name: DB_USER
+          value: "root"
+        - name: DB_PASS
+          value: "example"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php-login-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: php-login-app
+  ports:
+  - port: 80
+    targetPort: 80
