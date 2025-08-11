@@ -160,8 +160,9 @@ cloud alpha billing accounts list
 ```
 ```
 acoca@K8s gke-challenge % gcloud alpha billing accounts list
-ACCOUNT_ID            NAME                      OPEN  MASTER_ACCOUNT_ID
-0144E4-4F81E0-26C456  Mi cuenta de facturación  True
+|ACCOUNT_ID            |NAME                      |OPEN  MASTER_ACCOUNT_ID|
+|----------------------|--------------------------|-----------------------|
+|0144E4-4F81E0-26C456  |Mi cuenta de facturación  |True                   |
 ```
 ```
 gcloud beta billing projects link gke-challenge-msl  --billing-account=0144E4-4F81E0-26C456 
