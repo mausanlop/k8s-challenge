@@ -1,5 +1,5 @@
 # K8s Challenge
-#### El siguiente repositorio contiene un despliegue básico de una aplicación web en un cluster de kubernetes, usando herramientas de Google Cloud Platform (GCP) como GKE y Cloud SQL, además de monitoreo con Prometheus y Grafana. 
+#### El siguiente repositorio contiene un despliegue básico de una aplicación web en un cluster de kubernetes, usando herramientas de Google Cloud Platform (GCP) como GKE y Cloud SQL, además de monitoreo de infraestructura con Prometheus y Grafana. 
 
 ### ⚙️ Premisas y Requisitos para Ejecutar el Proyecto
 
