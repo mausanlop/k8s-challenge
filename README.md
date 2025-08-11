@@ -670,8 +670,7 @@ Pantalla de login
 ```
 Pantalla con acceso
 ```
-<img width="2920" height="800" alt="image" src="https://github.com/user-attachments/assets/74221fda-e7f0-41a3-bc6a-1c827643e61a" />
-
+![Acceso ](Acceso.png)
 ---
 
 #### 📊 8. Monitoreo con Helm, Prometheus y Grafana
@@ -733,8 +732,7 @@ URL: http://localhost:3000
 Usuario:  admin  
 Password: prom-operator
 ```
-
-<img width="3068" height="1382" alt="image" src="https://github.com/user-attachments/assets/16a60563-1540-48ce-b5af-43f6c93a627b" />
+![Grafana ](Grafana.png)
 
 8.4 Redirección de puerto y acceso a Prometheus
 
@@ -750,7 +748,7 @@ Handling connection for 9090
 URL http://localhost:9090  
 ```
 
-<img width="3428" height="1496" alt="image" src="https://github.com/user-attachments/assets/5ce000ef-2ef5-405f-820e-c3726884931a" />
+![Prometheus ](Prometheus.png)
 
 8.4 Bash monitoring-portforward.sh  para redireccionar ambas coexiones Grafana y Prometheus
 
