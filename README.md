@@ -723,6 +723,10 @@ URL: http://localhost:3000
 Usuario:  admin  
 Password: prom-operator
 ```
+```
+<img width="3068" height="1382" alt="image" src="https://github.com/user-attachments/assets/16a60563-1540-48ce-b5af-43f6c93a627b" />
+
+```
 8.4 Redirección de puerto y acceso a Prometheus
 
 ```
@@ -735,5 +739,15 @@ Forwarding from [::1]:9090 -> 9090
 Handling connection for 9090
 
 URL http://localhost:9090  
+```
+```
+<img width="3428" height="1496" alt="image" src="https://github.com/user-attachments/assets/5ce000ef-2ef5-405f-820e-c3726884931a" />
+
+```
+
+
+
+
+
 ```
 
