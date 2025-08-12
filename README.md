@@ -26,7 +26,7 @@ gcloud services enable containerregistry.googleapis.com
 
 ---
 
-#### ✅ 2. Recursos necearios en equipo local (MacOS)
+#### ✅ 2. Recursos necesarios en equipo local (MacOS)
 
 #### 2.1 Software necesario:
 | Herramienta      | Propósito                             | Comando sugerido o enlace                    |
