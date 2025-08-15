@@ -512,7 +512,6 @@ exit;
 
 ```
 <?php
-// SIN espacios/líneas fuera de este bloque PHP
 $host = getenv('DB_HOST') ?: '127.0.0.1';
 $db   = getenv('DB_NAME') ?: 'login_db';
 $user = getenv('DB_USER') ?: 'root';
